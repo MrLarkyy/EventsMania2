@@ -1,0 +1,79 @@
+events:
+  example1:
+    type: BLOCK_BREAK
+    duration: 2000 # ticks
+    types:
+      # - ALL
+      - STONE
+      - DIORITE
+      - ANDESITE
+      - GRANITE
+    delayed-start:
+      delay: 100 # ticks
+      actions:
+        0:
+          - type: message
+            message: "Block Miner event is starting in 5 seconds!"
+        20:
+          - type: message
+            message: "Block Miner event is starting in 4 seconds!"
+        40:
+          - type: message
+            message: "Block Miner event is starting in 3 seconds!"
+        60:
+          - type: message
+            message: "Block Miner event is starting in 2 seconds!"
+        80:
+          - type: message
+            message: "Block Miner event is starting in 1 seconds!"
+    actions:
+      0:
+        - type: start-ticker
+          id: example
+          #repeat-limit: 10 # Limit of repeats
+          repeat-every: 200 # ticks
+          actions:
+            - type: message
+              messages:
+                - " "
+                - "Current Block Miner event leaderboard!"
+                - " "
+                - "#1 %leaderboard-name-1% - %leaderboard-value-1%"
+                - "#2 %leaderboard-name-2% - %leaderboard-value-2%"
+                - "#3 %leaderboard-name-3% - %leaderboard-value-3%"
+                - " "
+      1900:
+        - type: message
+          message: "Block Miner event is ending in 5 seconds!"
+      1920:
+        - type: message
+          message: "Block Miner event is ending in 4 seconds!"
+      1940:
+        - type: message
+          message: "Block Miner event is ending in 3 seconds!"
+      1960:
+        - type: message
+          message: "Block Miner event is ending in 2 seconds!"
+      1980:
+        - type: message
+          message: "Block Miner event is ending in 1 seconds!"
+    end-actions:
+      - type: message
+        messages:
+          - " "
+          - "Block Miner event has ended!"
+          - " "
+          - "#1 %leaderboard-name-1% - %leaderboard-value-1%"
+          - "#2 %leaderboard-name-2% - %leaderboard-value-2%"
+          - "#3 %leaderboard-name-3% - %leaderboard-value-3%"
+          - " "
+    rewards:
+      1:
+        - type: message
+          message: "You have won reward 1"
+      2:
+        - type: message
+          message: "You have won reward 2"
+      3:
+        - type: message
+          message: "You have won reward 3"

@@ -1,0 +1,2 @@
+period: 6000 # Ticks - 6000 ticks = 5 minutes
+min-players: 2

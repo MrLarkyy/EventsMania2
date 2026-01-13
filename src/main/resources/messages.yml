@@ -1,0 +1,13 @@
+# Messages configuration for EventsMania
+# You can customize all messages here
+
+# General messages
+plugin-reloaded: "Plugin has been reloaded!"
+plugin-reloading: "Plugin is being reloaded!"
+
+no-permission: "You do not have permission to do this!"
+event-starting: "Event is starting!"
+event-stopped: "Event has been stopped!"
+event-not-running: "Event is not running!"
+event-already-running: "Event is already running!"
+event-not-found: "Event not found!"
