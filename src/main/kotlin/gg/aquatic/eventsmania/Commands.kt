@@ -20,11 +20,17 @@ object Commands {
                         val event = getOrNull<Event>("event")
 
                         if (event == null) {
-                            sender.sendMessage("Event not found!")
+                            Messages.EVENT_NOT_FOUND.message().send(sender)
                             return@execute true
                         }
-                        event.start()
-                        sender.sendMessage("Event started!")
+
+                        if (EventManager.runningEvent != null) {
+                            Messages.EVENT_ALREADY_RUNNING.message().send(sender)
+                            return@execute true
+                        }
+
+                        EventManager.runningEvent = event.start()
+                        Messages.EVENT_STARTING.message().send(sender)
                         true
                     }
                 }
@@ -34,18 +40,18 @@ object Commands {
                 suspendExecute<CommandSender> {
                     val running = EventManager.runningEvent
                     if (running == null) {
-                        sender.sendMessage("No event is running!")
+                        Messages.EVENT_NOT_RUNNING.message().send(sender)
                         return@suspendExecute
                     }
                     running.stop()
-                    sender.sendMessage("Event stopped!")
+                    Messages.EVENT_STOPPED.message().send(sender)
                 }
             }
             "reload" {
                 suspendExecute<CommandSender> {
-                    sender.sendMessage("Reloading events...")
+                    Messages.PLUGIN_RELOADING.message().send(sender)
                     EventsMania.reloadPlugin()
-                    sender.sendMessage("Events reloaded!")
+                    Messages.PLUGIN_RELOADED.message().send(sender)
                 }
             }
 

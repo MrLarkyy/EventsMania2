@@ -17,7 +17,7 @@ enum class Messages(
     PLUGIN_RELOADING("plugin-reloading"),
 
     // ERRORS
-    NO_PERMISSION("no-permission"),
+    //NO_PERMISSION("no-permission"),
     EVENT_STARTING("event-starting"),
     EVENT_STOPPED("event-stopped"),
     EVENT_NOT_RUNNING("event-not-running"),
