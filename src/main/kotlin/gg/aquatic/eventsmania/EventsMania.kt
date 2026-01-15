@@ -1,5 +1,6 @@
 package gg.aquatic.eventsmania
 
+import gg.aquatic.common.coroutine.VirtualsCtx
 import gg.aquatic.eventsmania.events.EventManager
 import gg.aquatic.kregistry.Registry
 import gg.aquatic.waves.statistic.StatisticType
@@ -16,6 +17,10 @@ object EventsMania: JavaPlugin() {
             replaceRegistry(StatisticType.REGISTRY_KEY) {
                 registerStatistic("BLOCK_BREAK", BlockBreakStatistic)
             }
+        }
+
+        VirtualsCtx {
+            Messages.load()
         }
 
         println("Registered statistics: ${StatisticType.REGISTRY.getAll().values.sumOf { it.getAll().size }}")
