@@ -31,7 +31,7 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
-    compileOnly("gg.aquatic:Waves:26.0.5")
+    compileOnly("gg.aquatic:Waves:26.0.6")
     testImplementation(kotlin("test"))
 }
 
