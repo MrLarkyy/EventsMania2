@@ -1,10 +1,10 @@
 package gg.aquatic.eventsmania
 
+import gg.aquatic.common.HikariDBFactory
 import gg.aquatic.common.coroutine.VirtualsCtx
 import gg.aquatic.eventsmania.db.DBHandler
 import gg.aquatic.eventsmania.db.DataHandler
 import gg.aquatic.eventsmania.db.DataManager
-import gg.aquatic.eventsmania.db.EMDatabaseFactory
 import gg.aquatic.eventsmania.events.EventManager
 import gg.aquatic.eventsmania.hook.PAPIHook
 import gg.aquatic.kregistry.Registry
@@ -31,7 +31,7 @@ object EventsMania : JavaPlugin() {
         }
         reloadPlugin()
 
-        val database = EMDatabaseFactory.init(
+        val database = HikariDBFactory.init(
             settings.dbUrl,
             settings.dbDriver,
             settings.dbUser,
