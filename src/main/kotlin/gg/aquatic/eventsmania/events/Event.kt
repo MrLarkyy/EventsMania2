@@ -2,8 +2,8 @@ package gg.aquatic.eventsmania.events
 
 import gg.aquatic.execute.ActionHandle
 import gg.aquatic.execute.executeActions
+import gg.aquatic.treepapi.updatePAPIPlaceholders
 import gg.aquatic.waves.statistic.StatisticHandle
-import gg.aquatic.waves.util.updatePAPIPlaceholders
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 

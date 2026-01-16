@@ -1,49 +1,43 @@
 package gg.aquatic.eventsmania.hook
 
 import gg.aquatic.eventsmania.EventsMania.dataManager
-import gg.aquatic.waves.util.PAPIUtil
-import org.bukkit.entity.Player
+import gg.aquatic.eventsmania.events.EventManager
+import gg.aquatic.treepapi.papiPlaceholder
 
 object PAPIHook {
 
-    fun initialize() {
-        PAPIUtil.registerExtension("larkyy", "eventsmania") { p, params ->
-            val args = params.split("_")
-            if (args.isEmpty()) return@registerExtension ""
-            when (args[0].lowercase()) {
-                // %eventsmania_leaderboard_rank%
-                // %eventsmania_leaderboard_wins%
-                // %eventsmania_leaderboard_wins_<place>%
-                // %eventsmania_leaderboard_username_<place>%
-                "leaderboard" -> {
-                    if (args.size < 2) return@registerExtension ""
-                    when (args[1].lowercase()) {
-                        "rank" -> {
-                            val player = p as? Player ?: return@registerExtension ""
-                            return@registerExtension dataManager.getPlayerRankOrNull(player.uniqueId)?.toString() ?: ""
-                        }
+    fun initialize() = papiPlaceholder("Larkyy","eventsmania") {
+        "leaderboard" {
+            "rank" {
+                handle {
+                    dataManager.getPlayerRankOrNull(binder.uniqueId)?.toString() ?: ""
+                }
+            }
+            "wins" {
+                intArgument("place") {
+                    handle {
+                        val place = getOrNull<Int>("place") ?: return@handle ""
+                        dataManager.getLeaderboard().getOrNull(place - 1)?.score?.toString() ?: ""
+                    }
+                }
 
-                        "wins" -> {
-                            if (args.size < 2) {
-                                val player = p as? Player ?: return@registerExtension ""
-                                return@registerExtension dataManager.getPlayerWinsOrNull(player.uniqueId)?.toString() ?: ""
-                            }
-                            val place = args[2].toIntOrNull() ?: return@registerExtension ""
-                            return@registerExtension dataManager.getLeaderboard()
-                                .getOrNull(place - 1)?.score?.toString() ?: ""
-                        }
-
-                        "username" -> {
-                            if (args.size < 3) return@registerExtension ""
-                            val place = args[2].toIntOrNull() ?: return@registerExtension ""
-                            return@registerExtension dataManager.getLeaderboard()
-                                .getOrNull(place - 1)?.username ?: ""
-                        }
+                handle {
+                    dataManager.getPlayerWinsOrNull(binder.uniqueId)?.toString() ?: ""
+                }
+            }
+            "username" {
+                intArgument("place") {
+                    handle {
+                        val place = getOrNull<Int>("place") ?: return@handle ""
+                        dataManager.getLeaderboard().getOrNull(place - 1)?.username ?: ""
                     }
                 }
             }
-            return@registerExtension ""
+        }
+        "isrunning" {
+            handle {
+                return@handle (EventManager.runningEvent != null).toString()
+            }
         }
     }
-
 }
