@@ -1,7 +1,7 @@
 package gg.aquatic.eventsmania.data
 
 import gg.aquatic.common.toMMComponent
-import gg.aquatic.eventsmania.data.statistic.PAPIStatistic
+import gg.aquatic.eventsmania.data.statistic.PAPIStatisticData
 import gg.aquatic.eventsmania.data.statistic.StatisticData
 import gg.aquatic.eventsmania.events.Event
 import gg.aquatic.stacked.toStackedBuilder
@@ -18,7 +18,7 @@ class EventData(
     val statistic = editPolymorphicConfigurable(
         "statistic",
         statistic,
-        mapOf("placeholder" to { PAPIStatistic("%vault_balance%" )}),
+        mapOf("placeholder" to { PAPIStatisticData("%vault_balance%" )}),
         { data ->
             Material.SPRUCE_SAPLING.toStackedBuilder {
                 displayName = "Statistic Type".toMMComponent()

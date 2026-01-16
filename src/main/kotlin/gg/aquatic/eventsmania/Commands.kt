@@ -2,12 +2,11 @@ package gg.aquatic.eventsmania
 
 import gg.aquatic.common.toMMComponent
 import gg.aquatic.eventsmania.data.EventData
-import gg.aquatic.eventsmania.data.statistic.PAPIStatistic
+import gg.aquatic.eventsmania.data.statistic.PAPIStatisticData
 import gg.aquatic.eventsmania.events.Event
 import gg.aquatic.eventsmania.events.EventManager
 import gg.aquatic.kommand.command
 import gg.aquatic.waves.editor.EditorHandler
-import gg.aquatic.waves.editor.ui.EditorMenuProvider
 import org.bukkit.command.CommandSender
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
@@ -64,7 +63,7 @@ object Commands {
             "edit" {
                 listArgument("event", { EventManager.events.values }, { it.id }) {
                     suspendExecute<Player> {
-                        val data = EventData(PAPIStatistic("%vault_balance%",20),500)
+                        val data = EventData(PAPIStatisticData("%vault_balance%",20),500)
                         EditorHandler.startEditing(sender,"Test".toMMComponent(),data) {
                             val cfg = YamlConfiguration()
                             it.serialize(cfg)

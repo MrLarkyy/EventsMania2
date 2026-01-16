@@ -12,7 +12,7 @@ import gg.aquatic.waves.statistic.impl.PlaceholderStatistic
 import org.bukkit.Material
 import org.bukkit.entity.Player
 
-class PAPIStatistic(
+class PAPIStatisticData(
     placeholder: String = "",
     updateFrequency: Int = 20
 ) : StatisticData() {
@@ -39,8 +39,8 @@ class PAPIStatistic(
         ChatInputHandler.forInteger("Type the update frequency in ticks (default is 20):")
     )
 
-    override fun copy(): PAPIStatistic {
-        return PAPIStatistic(placeholder.value, updateFrequency.value)
+    override fun copy(): PAPIStatisticData {
+        return PAPIStatisticData(placeholder.value, updateFrequency.value)
     }
 
     override fun createSupplier(): (EventHandle) -> StatisticHandle<Player> {
