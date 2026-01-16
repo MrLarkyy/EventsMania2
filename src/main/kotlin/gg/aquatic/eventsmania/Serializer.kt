@@ -35,7 +35,12 @@ object Serializer {
         val cfg = config.getConfiguration()
         val period = cfg.getLong("period")
         val minPlayers = cfg.getInt("min-players")
-        return PluginSettings(minPlayers, period)
+
+        val dbUrl = cfg.getString("database.url") ?: throw Exception("Database URL not set")
+        val dbDriver = cfg.getString("database.driver") ?: throw Exception("Database driver not set")
+        val dbUser = cfg.getString("database.user") ?: throw Exception("Database user not set")
+        val dbPassword = cfg.getString("database.password") ?: throw Exception("Database password not set")
+        return PluginSettings(minPlayers, period, dbUrl, dbDriver, dbUser, dbPassword)
     }
 
     fun loadEvents(config: FileConfiguration): Map<String, Event> {
