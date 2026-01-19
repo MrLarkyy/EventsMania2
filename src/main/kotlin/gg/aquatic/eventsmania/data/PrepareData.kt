@@ -42,7 +42,7 @@ class PrepareData(
                                 "- 5 - Just at 5th tick\n" +
                                 "- every-2 - Every 2 ticks\n" +
                                 "- every-2-!5 - Every 2 ticks, for 5 times limit\n" +
-                                "- every-2->20 - Every 2 ticks, since 20th tick" +
+                                "- every-2->20 - Every 2 ticks, since 20th tick\n" +
                                 "- every-2-!5->20 - Every 2 ticks, for 5 times limit, since 20th tick\n" +
                                 "- 1;4;7 - List of ticks\n" +
                                 "- every-2;5 - Every 2 ticks and at 5th tick"
