@@ -5,10 +5,10 @@ import gg.aquatic.common.coroutine.VirtualsCtx
 import gg.aquatic.eventsmania.db.DBHandler
 import gg.aquatic.eventsmania.db.DataHandler
 import gg.aquatic.eventsmania.db.DataManager
+import gg.aquatic.eventsmania.db.EMTable
 import gg.aquatic.eventsmania.events.EventManager
 import gg.aquatic.eventsmania.hook.PAPIHook
 import gg.aquatic.kregistry.Registry
-import gg.aquatic.kurrency.db.BalancesTable
 import gg.aquatic.waves.statistic.StatisticType
 import gg.aquatic.waves.statistic.impl.BlockBreakStatistic
 import gg.aquatic.waves.statistic.registerStatistic
@@ -36,7 +36,7 @@ object EventsMania : JavaPlugin() {
             settings.dbDriver,
             settings.dbUser,
             settings.dbPassword,
-            BalancesTable
+            EMTable
         )
         dataManager = DataManager(DBHandler(database))
         VirtualsCtx {
