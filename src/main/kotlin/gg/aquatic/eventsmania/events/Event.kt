@@ -18,7 +18,7 @@ class Event(
 
     class PrepareSettings(
         val prepareTime: Int,
-        val actions: Map<Int, Collection<ActionHandle<Player>>>
+        val actions: Map<Int, List<ActionHandle<Player>>>
     ) {
         suspend fun execute(handle: EventHandle) {
             val tick = handle.tick

@@ -13,12 +13,15 @@ import gg.aquatic.waves.editor.ValueSerializer
 import gg.aquatic.waves.editor.handlers.ChatInputHandler
 import gg.aquatic.waves.input.impl.ChatInput
 import gg.aquatic.waves.input.impl.chatInputValidation
+import net.kyori.adventure.text.Component
 import org.bukkit.Material
 
 class EventData(
     statistic: StatisticData,
     duration: Int,
-    rewards: Map<Int, List<ActionData>> = mapOf()
+    rewards: Map<Int, List<ActionData>> = mapOf(),
+    initialActions: Map<Int, List<ActionData>> = mapOf(),
+    initialEndActions: List<ActionData> = listOf()
 ) : Configurable<EventData>() {
 
     val statistic = editPolymorphicConfigurable(
@@ -72,13 +75,76 @@ class EventData(
         }
     )
 
+    val prepareData = editConfigurable("delayed", PrepareData(), {
+        stackedItem(Material.COMPARATOR) {
+            displayName = Component.text("Game Preparation")
+            lore.addAll(
+                listOf(
+                    "",
+                    "Using game preparation you can setup",
+                    "actions that are executed before",
+                    "the actual game starts"
+                ).map { it.toMMComponent() })
+        }.getItem()
+    })
+
+    val gameActions = editInt2PolymorphicListConfigurableMap(
+        "actions", initialActions, mapOf("message" to { MessageActionData() }),
+        { player, keySupplier ->
+            player.closeInventory()
+            ChatInput.createHandle(validator = chatInputValidation {
+                validate { str -> str.toIntOrNull() != null }
+                onFail { player, string ->
+                    player.sendMessage("Please enter a valid integer.")
+                }
+            }).await(player).thenAccept { value ->
+                keySupplier(value?.toIntOrNull())
+            }
+        },
+        { value ->
+            stackedItem(Material.CHAIN_COMMAND_BLOCK) {
+                displayName = "Game Actions".toMMComponent()
+            }.getItem()
+        },
+        { entry, value ->
+            stackedItem(Material.COMMAND_BLOCK) {
+                displayName = "#$entry Tick Actions".toMMComponent()
+            }.getItem()
+        },
+        { action ->
+            stackedItem(Material.PAPER) {
+                displayName = "Action: ${action.type.value}".toMMComponent()
+            }.getItem()
+        }
+    )
+
+    val gameEndActions =
+        editPolymorphicConfigurableList(
+            "end-actions", initialEndActions, mapOf("message" to { MessageActionData() }),
+            { value ->
+                stackedItem(Material.CHAIN_COMMAND_BLOCK) {
+                    displayName = "Game End Actions".toMMComponent()
+                }.getItem()
+            },
+            { action ->
+                stackedItem(Material.PAPER) {
+                    displayName = "Action: ${action.type.value}".toMMComponent()
+                }.getItem()
+            }
+        )
+
     fun toEvent(id: String): Event {
+        val prepare = Event.PrepareSettings(
+            prepareData.value.prepareTime.value,
+            prepareData.value.actions.value.associate { it.key.toInt() to it.value.map { it.value.create() } })
+        val actions = gameActions.value.associate { it.key.toInt() to it.value.map { it.value.create() } }
+        val endActions = gameEndActions.value.map { it.value.create() }
         return Event(
             id,
             statistic.value.createSupplier(),
             duration.value,
-            Event.PrepareSettings(0, mapOf()),
-            Event.GameActions(mapOf(), listOf()),
+            prepare,
+            Event.GameActions(actions, endActions),
             rewards.value.associate { it.key.toInt() to it.value.map { it.value.create() } }
         )
     }
@@ -87,6 +153,9 @@ class EventData(
         return EventData(
             statistic.clone().value,
             duration.value,
-            rewards.value.associate { it.key.toInt() to it.value.map { it.clone().value } })
+            rewards.value.associate { it.key.toInt() to it.value.map { it.clone().value } },
+            gameActions.value.associate { it.key.toInt() to it.value.map { it.clone().value } },
+            gameEndActions.value.map { it.clone().value }
+        )
     }
 }
