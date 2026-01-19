@@ -134,9 +134,7 @@ class EventData(
         )
 
     fun toEvent(id: String): Event {
-        val prepare = Event.PrepareSettings(
-            prepareData.value.prepareTime.value,
-            prepareData.value.actions.value.associate { it.key.toInt() to it.value.map { it.value.create() } })
+        val prepare = prepareData.value.toPrepareSettings()
         val actions = gameActions.value.associate { it.key.toInt() to it.value.map { it.value.create() } }
         val endActions = gameEndActions.value.map { it.value.create() }
         return Event(
