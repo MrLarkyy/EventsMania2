@@ -1,6 +1,7 @@
 package gg.aquatic.eventsmania.data
 
 import gg.aquatic.common.toMMComponent
+import gg.aquatic.eventsmania.TicksUtil
 import gg.aquatic.eventsmania.data.action.ActionData
 import gg.aquatic.eventsmania.events.Event
 import gg.aquatic.execute.ActionHandle
@@ -34,8 +35,8 @@ class PrepareData(
             )
             player.closeInventory()
             ChatInput.createHandle(validator = chatInputValidation {
-                validate { str -> str.toIntOrNull() != null }
-                onFail { player, string ->
+                validate { str -> TicksUtil.validateTicks(str) }
+                onFail { player, _ ->
                     player.sendMessage(
                         "Please enter a valid tick time!\n\n" +
                                 "Examples:\n" +
@@ -77,7 +78,7 @@ class PrepareData(
             val key = entry.key
             val actions = entry.value.map { it.value.create() }
 
-            parseTicks(key, prepareTime.value).forEach { tick ->
+            TicksUtil.parseTicks(key, prepareTime.value).forEach { tick ->
                 actionsFinalMap.getOrPut(tick) { mutableListOf() }.addAll(actions)
             }
         }
@@ -85,42 +86,6 @@ class PrepareData(
             prepareTime = prepareTime.value,
             actions = actionsFinalMap.mapValues { it.value.toList() as List<ActionHandle<Player>> }
         )
-    }
-
-    private fun parseTicks(input: String, maxTime: Int): Set<Int> {
-        val ticks = mutableSetOf<Int>()
-        val parts = input.split(";")
-
-        for (part in parts) {
-            if (part.startsWith("every-")) {
-                val segments = part.split("-")
-                // every-2-!5->20
-                var interval = 1
-                var limit = Int.MAX_VALUE
-                var startAt = 0
-
-                for (segment in segments) {
-                    when {
-                        segment.all { it.isDigit() } -> interval = segment.toInt()
-                        segment.startsWith("!") -> limit = segment.substring(1).toInt()
-                        segment.startsWith(">") -> startAt = segment.substring(1).toInt()
-                    }
-                }
-
-                var count = 0
-                var current = startAt
-                while (current <= maxTime && count < limit) {
-                    ticks.add(current)
-                    current += interval
-                    count++
-                }
-            } else {
-                part.toIntOrNull()?.let {
-                    if (it <= maxTime) ticks.add(it)
-                }
-            }
-        }
-        return ticks
     }
 
     override fun copy(): PrepareData {
