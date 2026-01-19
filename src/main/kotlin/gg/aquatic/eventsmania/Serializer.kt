@@ -97,8 +97,8 @@ object Serializer {
         return map
     }
 
-    fun loadTimedActions(section: ConfigurationSection, duration: Int): Map<Int, Collection<ActionHandle<Player>>> {
-        val map = mutableMapOf<Int, Collection<ActionHandle<Player>>>()
+    fun loadTimedActions(section: ConfigurationSection, duration: Int): Map<Int, List<ActionHandle<Player>>> {
+        val map = mutableMapOf<Int, List<ActionHandle<Player>>>()
         for (key in section.getKeys(false)) {
             val actions = ActionSerializer.fromSections<Player>(section.getSectionList(key))
             if (key.lowercase().startsWith("every-")) {
