@@ -11,4 +11,15 @@ abstract class ActionData: Configurable<ActionData>() {
 
     abstract fun create(): ActionHandle<Player>
 
+    companion object {
+        val ALL_TYPES = mapOf(
+            "message" to { MessageActionData() },
+            "command" to { CommandActionData() },
+            "actionbar" to { ActionbarActionData() },
+            "sound" to { SoundActionData() },
+            "stop-sound" to { SoundStopActionData() },
+            "title" to { TitleActionData() },
+            "close-inventory" to { CloseInventoryActionData() }
+        )
+    }
 }

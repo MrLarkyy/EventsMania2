@@ -2,7 +2,6 @@ package gg.aquatic.eventsmania.data
 
 import gg.aquatic.common.toMMComponent
 import gg.aquatic.eventsmania.data.action.ActionData
-import gg.aquatic.eventsmania.data.action.MessageActionData
 import gg.aquatic.eventsmania.events.Event
 import gg.aquatic.stacked.stackedItem
 import gg.aquatic.waves.editor.Configurable
@@ -18,7 +17,7 @@ class PrepareData(
     val prepareTime = editInt("prepare-time", initialPrepareTime,"Type the prepare time in ticks:")
 
     val actions = editInt2PolymorphicListConfigurableMap(
-        "actions", initialActions, mapOf("message" to { MessageActionData() }),
+        "actions", initialActions, ActionData.ALL_TYPES,
         { player, keySupplier ->
             player.closeInventory()
             ChatInput.createHandle(validator = chatInputValidation {

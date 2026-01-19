@@ -36,7 +36,7 @@ class EventData(
         })
 
     val duration = edit(
-        "update", duration, ValueSerializer.IntSerializer(20), {
+        "duration", duration, ValueSerializer.IntSerializer(20), {
             Material.CLOCK.toStackedBuilder {
                 displayName = "Duration".toMMComponent()
                 lore += listOf("", "Current value: $it").map { line -> line.toMMComponent() }
@@ -46,7 +46,7 @@ class EventData(
     )
 
     val rewards = editInt2PolymorphicListConfigurableMap(
-        "rewards", rewards, mapOf("message" to { MessageActionData() }),
+        "rewards", rewards, ActionData.ALL_TYPES,
         { player, keySupplier ->
             player.closeInventory()
             ChatInput.createHandle(validator = chatInputValidation {
@@ -89,7 +89,7 @@ class EventData(
     })
 
     val gameActions = editInt2PolymorphicListConfigurableMap(
-        "actions", initialActions, mapOf("message" to { MessageActionData() }),
+        "actions", initialActions, ActionData.ALL_TYPES,
         { player, keySupplier ->
             player.closeInventory()
             ChatInput.createHandle(validator = chatInputValidation {
@@ -120,7 +120,7 @@ class EventData(
 
     val gameEndActions =
         editPolymorphicConfigurableList(
-            "end-actions", initialEndActions, mapOf("message" to { MessageActionData() }),
+            "end-actions", initialEndActions, ActionData.ALL_TYPES,
             { value ->
                 stackedItem(Material.CHAIN_COMMAND_BLOCK) {
                     displayName = "Game End Actions".toMMComponent()
