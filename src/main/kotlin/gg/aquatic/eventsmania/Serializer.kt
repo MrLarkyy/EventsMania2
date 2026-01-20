@@ -5,9 +5,9 @@ import gg.aquatic.eventsmania.events.Event
 import gg.aquatic.eventsmania.events.EventHandle
 import gg.aquatic.execute.ActionHandle
 import gg.aquatic.execute.action.ActionSerializer
+import gg.aquatic.statistik.StatisticHandle
+import gg.aquatic.statistik.StatistikSerializer
 import gg.aquatic.waves.Config
-import gg.aquatic.waves.statistic.StatisticHandle
-import gg.aquatic.waves.statistic.StatistikSerializer
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.entity.Player
@@ -24,15 +24,14 @@ object Serializer {
             }
             val config = Config(file, EventsMania)
             config.loadSync()
-            events += loadEvents(config.getConfiguration())
+            events += loadEvents(config.configuration)
         }
         return events
     }
 
     fun loadSettings(): PluginSettings {
         val config = Config(File(EventsMania.dataFolder, "config.yml"), EventsMania)
-        config.loadSync()
-        val cfg = config.getConfiguration()
+        val cfg = config.loadSync()
         val period = cfg.getLong("period")
         val minPlayers = cfg.getInt("min-players")
 

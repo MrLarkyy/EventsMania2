@@ -1,8 +1,8 @@
 package gg.aquatic.eventsmania.data.action
 
+import gg.aquatic.common.argument.ObjectArguments
 import gg.aquatic.execute.ActionHandle
 import gg.aquatic.execute.action.impl.SoundStopAction
-import gg.aquatic.execute.argument.ObjectArguments
 import gg.aquatic.waves.editor.value.SimpleEditorValue
 import org.bukkit.Registry
 import org.bukkit.Sound
@@ -14,7 +14,9 @@ class SoundStopActionData: ActionData() {
     val sound = editSound("sound", Sound.ENTITY_PLAYER_LEVELUP, "Select a sound:")
 
     override fun create(): ActionHandle<Player> {
-        return ActionHandle(SoundStopAction, ObjectArguments(mapOf("sound" to Registry.SOUNDS.getKey(sound.value)?.toString())))
+        return ActionHandle(SoundStopAction,
+            ObjectArguments(mapOf("sound" to Registry.SOUNDS.getKey(sound.value)?.toString()))
+        )
     }
 
     override fun copy(): ActionData {

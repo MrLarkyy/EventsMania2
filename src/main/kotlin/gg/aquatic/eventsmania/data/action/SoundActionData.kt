@@ -1,8 +1,8 @@
 package gg.aquatic.eventsmania.data.action
 
+import gg.aquatic.common.argument.ObjectArguments
 import gg.aquatic.execute.ActionHandle
 import gg.aquatic.execute.action.impl.SoundAction
-import gg.aquatic.execute.argument.ObjectArguments
 import gg.aquatic.waves.editor.value.SimpleEditorValue
 import org.bukkit.Registry
 import org.bukkit.Sound
@@ -16,7 +16,15 @@ class SoundActionData: ActionData() {
     val volume = editFloat("volume", 1f, "Sound volume (0.0 - 1.0):")
 
     override fun create(): ActionHandle<Player> {
-        return ActionHandle(SoundAction, ObjectArguments(mapOf("sound" to Registry.SOUNDS.getKey(sound.value)?.toString(), "pitch" to pitch.value, "volume" to volume.value)))
+        return ActionHandle(SoundAction,
+            ObjectArguments(
+                mapOf(
+                    "sound" to Registry.SOUNDS.getKey(sound.value)?.toString(),
+                    "pitch" to pitch.value,
+                    "volume" to volume.value
+                )
+            )
+        )
     }
 
     override fun copy(): ActionData {

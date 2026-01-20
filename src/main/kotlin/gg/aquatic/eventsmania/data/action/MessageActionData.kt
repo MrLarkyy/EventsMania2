@@ -1,8 +1,8 @@
 package gg.aquatic.eventsmania.data.action
 
+import gg.aquatic.common.argument.ObjectArguments
 import gg.aquatic.eventsmania.data.action.data.MessageData
 import gg.aquatic.execute.ActionHandle
-import gg.aquatic.execute.argument.ObjectArguments
 import gg.aquatic.stacked.stackedItem
 import gg.aquatic.waves.editor.value.SimpleEditorValue
 import gg.aquatic.waves.util.action.MessageAction

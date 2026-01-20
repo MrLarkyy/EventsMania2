@@ -1,8 +1,8 @@
 package gg.aquatic.eventsmania.events
 
 import gg.aquatic.eventsmania.EventsMania
+import gg.aquatic.statistik.StatisticAddEvent
 import gg.aquatic.treepapi.updatePAPIPlaceholders
-import gg.aquatic.waves.statistic.StatisticAddEvent
 import org.bukkit.entity.Player
 import java.util.*
 

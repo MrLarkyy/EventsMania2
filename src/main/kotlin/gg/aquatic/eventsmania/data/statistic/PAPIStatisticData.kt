@@ -1,14 +1,14 @@
 package gg.aquatic.eventsmania.data.statistic
 
+import gg.aquatic.common.argument.ObjectArguments
 import gg.aquatic.common.toMMComponent
 import gg.aquatic.eventsmania.events.EventHandle
-import gg.aquatic.execute.argument.ObjectArguments
 import gg.aquatic.stacked.toStackedBuilder
+import gg.aquatic.statistik.StatisticHandle
+import gg.aquatic.statistik.impl.PlaceholderStatistic
 import gg.aquatic.waves.editor.ValueSerializer
 import gg.aquatic.waves.editor.handlers.ChatInputHandler
 import gg.aquatic.waves.editor.value.SimpleEditorValue
-import gg.aquatic.waves.statistic.StatisticHandle
-import gg.aquatic.waves.statistic.impl.PlaceholderStatistic
 import org.bukkit.Material
 import org.bukkit.entity.Player
 

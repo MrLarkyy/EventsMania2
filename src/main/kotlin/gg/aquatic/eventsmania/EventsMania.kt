@@ -9,9 +9,9 @@ import gg.aquatic.eventsmania.db.EMTable
 import gg.aquatic.eventsmania.events.EventManager
 import gg.aquatic.eventsmania.hook.PAPIHook
 import gg.aquatic.kregistry.Registry
-import gg.aquatic.waves.statistic.StatisticType
-import gg.aquatic.waves.statistic.impl.BlockBreakStatistic
-import gg.aquatic.waves.statistic.registerStatistic
+import gg.aquatic.statistik.StatisticType
+import gg.aquatic.statistik.impl.BlockBreakStatistic
+import gg.aquatic.statistik.registerStatistic
 import org.bukkit.plugin.java.JavaPlugin
 
 object EventsMania : JavaPlugin() {

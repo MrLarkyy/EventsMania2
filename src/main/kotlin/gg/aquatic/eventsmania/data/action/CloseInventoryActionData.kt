@@ -1,8 +1,8 @@
 package gg.aquatic.eventsmania.data.action
 
+import gg.aquatic.common.argument.ObjectArguments
 import gg.aquatic.execute.ActionHandle
 import gg.aquatic.execute.action.impl.CloseInventory
-import gg.aquatic.execute.argument.ObjectArguments
 import gg.aquatic.waves.editor.value.SimpleEditorValue
 import org.bukkit.entity.Player
 
