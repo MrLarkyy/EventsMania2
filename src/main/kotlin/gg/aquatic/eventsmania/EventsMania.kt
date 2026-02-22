@@ -8,10 +8,9 @@ import gg.aquatic.eventsmania.db.DataManager
 import gg.aquatic.eventsmania.db.EMTable
 import gg.aquatic.eventsmania.events.EventManager
 import gg.aquatic.eventsmania.hook.PAPIHook
-import gg.aquatic.kregistry.Registry
 import gg.aquatic.statistik.StatisticType
 import gg.aquatic.statistik.impl.BlockBreakStatistic
-import gg.aquatic.statistik.registerStatistic
+import gg.aquatic.waves.Waves
 import org.bukkit.plugin.java.JavaPlugin
 
 object EventsMania : JavaPlugin() {
@@ -20,9 +19,9 @@ object EventsMania : JavaPlugin() {
     lateinit var dataManager: DataManager
 
     override fun onEnable() {
-        Registry.update {
-            replaceRegistry(StatisticType.REGISTRY_KEY) {
-                registerStatistic("BLOCK_BREAK", BlockBreakStatistic)
+        Waves.registryBootstrap(Waves) {
+            registry(StatisticType.REGISTRY_KEY) {
+                add("BLOCK_BREAK", BlockBreakStatistic)
             }
         }
 

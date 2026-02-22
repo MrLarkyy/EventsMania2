@@ -34,7 +34,7 @@ class PrepareData(
                         "Type the prepare time in ticks:"
             )
             player.closeInventory()
-            ChatInput.createHandle(validator = chatInputValidation {
+            val value = ChatInput.createHandle(validator = chatInputValidation {
                 validate { str -> TicksUtil.validateTicks(str) }
                 onFail { player, _ ->
                     player.sendMessage(
@@ -49,9 +49,9 @@ class PrepareData(
                                 "- every-2;5 - Every 2 ticks and at 5th tick"
                     )
                 }
-            }).await(player).thenAccept { value ->
-                keySupplier(value)
-            }
+            }).await(player)
+
+            keySupplier(value)
         },
         { value ->
             stackedItem(Material.DIAMOND) {

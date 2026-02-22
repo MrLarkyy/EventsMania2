@@ -5,6 +5,7 @@ import gg.aquatic.statistik.StatisticAddEvent
 import gg.aquatic.treepapi.updatePAPIPlaceholders
 import org.bukkit.entity.Player
 import java.util.*
+import kotlin.concurrent.atomics.ExperimentalAtomicApi
 
 class EventHandle(
     val event: Event
@@ -27,9 +28,10 @@ class EventHandle(
     var tick = 0
         private set
 
+    @OptIn(ExperimentalAtomicApi::class)
     fun start() {
         EventsMania.logger.info("Event started")
-        EventManager.runningEvent = this
+        EventManager.runningEvent.store(this)
     }
 
     suspend fun tick() {
@@ -69,13 +71,15 @@ class EventHandle(
         }
     }
 
+    @OptIn(ExperimentalAtomicApi::class)
     suspend fun finalizeEvent() {
 
         phase = Phase.END
         tick = 0
 
         statisticHandle.unregister()
-        EventManager.runningEvent = null
+
+        EventManager.runningEvent.store(null)
         sortStatistics()
         event.gameActions.executeEnd(this)
 

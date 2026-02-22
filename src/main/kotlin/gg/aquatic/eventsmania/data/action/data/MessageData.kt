@@ -24,9 +24,9 @@ class MessageData(
         addButtonClick = { player, accept ->
             player.closeInventory()
             player.sendMessage("Enter line:")
-            ChatInput.createHandle(listOf("cancel")).await(player).thenAccept {
-                accept(it?.toMMComponent())
-            }
+            val value = ChatInput.createHandle(listOf("cancel")).await(player)
+
+            accept(value?.toMMComponent())
         },
         listIcon = { list -> ItemStack(Material.BOOK).apply { editMeta { it.displayName(Component.text("Edit Lore (${list.size} lines)")) } } },
         guiHandler = { p, ed, u -> openListMenu(p, ed, ed.addButtonClick, u) })

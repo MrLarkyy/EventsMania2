@@ -1,21 +1,24 @@
 package gg.aquatic.eventsmania.db
 
-import gg.aquatic.common.coroutine.VirtualsCtx
+import gg.aquatic.eventsmania.db.EMTable.wins
 import gg.aquatic.eventsmania.events.LeaderboardPlayer
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.plus
-import org.jetbrains.exposed.sql.count
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
-import org.jetbrains.exposed.sql.upsert
+import org.jetbrains.exposed.v1.core.SortOrder
+import org.jetbrains.exposed.v1.core.count
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.greater
+import org.jetbrains.exposed.v1.core.plus
+import org.jetbrains.exposed.v1.jdbc.Database
+import org.jetbrains.exposed.v1.jdbc.select
+import org.jetbrains.exposed.v1.jdbc.selectAll
+import org.jetbrains.exposed.v1.jdbc.transactions.suspendTransaction
+import org.jetbrains.exposed.v1.jdbc.upsert
 import java.util.*
 
 class DBHandler(private val database: Database) {
 
-    suspend fun addWin(uuid: UUID, username: String) = newSuspendedTransaction(VirtualsCtx, database) {
+    suspend fun addWin(uuid: UUID, username: String) = suspendTransaction(database) {
         EMTable.upsert(onUpdate = {
-            it[EMTable.wins] = EMTable.wins plus 1
+            it[wins] = wins plus 1
             it[EMTable.username] = username
         }) {
             it[EMTable.uuid] = uuid
@@ -24,42 +27,42 @@ class DBHandler(private val database: Database) {
         }
     }
 
-    suspend fun getPlayerRank(uuid: UUID): Int = newSuspendedTransaction(VirtualsCtx, database) {
-        val playerWins = EMTable.select(EMTable.wins)
+    suspend fun getPlayerRank(uuid: UUID): Int = suspendTransaction(database) {
+        val playerWins = EMTable.select(wins)
             .where { EMTable.uuid eq uuid }
-            .singleOrNull()?.get(EMTable.wins) ?: return@newSuspendedTransaction -1
+            .singleOrNull()?.get(wins) ?: return@suspendTransaction -1
 
         (EMTable.select(EMTable.uuid.count())
-            .where { EMTable.wins greater playerWins }
+            .where { wins greater playerWins }
             .single()[EMTable.uuid.count()] + 1).toInt()
     }
 
-    suspend fun getPlayerRank(userName: String): Int = newSuspendedTransaction(VirtualsCtx, database) {
-        val playerWins = EMTable.select(EMTable.wins)
+    suspend fun getPlayerRank(userName: String): Int = suspendTransaction(database) {
+        val playerWins = EMTable.select(wins)
             .where { EMTable.username eq userName }
-            .singleOrNull()?.get(EMTable.wins) ?: return@newSuspendedTransaction -1
+            .singleOrNull()?.get(wins) ?: return@suspendTransaction -1
 
         (EMTable.select(EMTable.uuid.count())
-            .where { EMTable.wins greater playerWins }
+            .where { wins greater playerWins }
             .single()[EMTable.uuid.count()] + 1).toInt()
     }
 
-    suspend fun getWins(uuid: UUID): Int = newSuspendedTransaction(VirtualsCtx, database) {
-        EMTable.select(EMTable.wins)
+    suspend fun getWins(uuid: UUID): Int = suspendTransaction(database) {
+        EMTable.select(wins)
             .where { EMTable.uuid eq uuid }
-            .singleOrNull()?.get(EMTable.wins) ?: 0
+            .singleOrNull()?.get(wins) ?: 0
     }
 
 
-    suspend fun getTopPlayers(limit: Int): List<LeaderboardPlayer> = newSuspendedTransaction(VirtualsCtx, database) {
+    suspend fun getTopPlayers(limit: Int): List<LeaderboardPlayer> = suspendTransaction(database) {
         EMTable.selectAll()
-            .orderBy(EMTable.wins to SortOrder.DESC)
+            .orderBy(wins to SortOrder.DESC)
             .limit(limit)
             .mapIndexed { index, row ->
                 LeaderboardPlayer(
                     row[EMTable.uuid],
                     row[EMTable.username],
-                    row[EMTable.wins]
+                    row[wins]
                 ).apply { rank = index + 1 }
             }
     }

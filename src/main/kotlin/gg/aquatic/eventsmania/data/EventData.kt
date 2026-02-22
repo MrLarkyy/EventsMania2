@@ -51,14 +51,14 @@ class EventData(
         "rewards", rewards, ActionData.ALL_TYPES,
         { player, keySupplier ->
             player.closeInventory()
-            ChatInput.createHandle(validator = chatInputValidation {
+            val value = ChatInput.createHandle(validator = chatInputValidation {
                 validate { str -> str.toIntOrNull() != null }
                 onFail { player, string ->
                     player.sendMessage("Please enter a valid integer.")
                 }
-            }).await(player).thenAccept { value ->
-                keySupplier(value?.toIntOrNull())
-            }
+            }).await(player)
+
+            keySupplier(value?.toIntOrNull())
         },
         { value ->
             stackedItem(Material.DIAMOND) {
@@ -94,7 +94,7 @@ class EventData(
         "actions", initialActions, ActionData.ALL_TYPES,
         { player, keySupplier ->
             player.closeInventory()
-            ChatInput.createHandle(validator = chatInputValidation {
+            val value = ChatInput.createHandle(validator = chatInputValidation {
                 validate { str -> TicksUtil.validateTicks(str) }
                 onFail { player, string ->
                     player.sendMessage(
@@ -109,9 +109,9 @@ class EventData(
                                 "- every-2;5 - Every 2 ticks and at 5th tick"
                     )
                 }
-            }).await(player).thenAccept { value ->
-                keySupplier(value)
-            }
+            }).await(player)
+
+            keySupplier(value)
         },
         { value ->
             stackedItem(Material.CHAIN_COMMAND_BLOCK) {

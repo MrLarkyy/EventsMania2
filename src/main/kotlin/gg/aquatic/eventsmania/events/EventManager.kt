@@ -1,19 +1,20 @@
 package gg.aquatic.eventsmania.events
 
 import gg.aquatic.common.event
-import gg.aquatic.common.ticker.Ticker
+import gg.aquatic.common.ticker.GlobalTicker
 import gg.aquatic.eventsmania.EventsMania
 import gg.aquatic.eventsmania.Serializer
 import org.bukkit.Bukkit
 import org.bukkit.event.player.PlayerQuitEvent
+import kotlin.concurrent.atomics.AtomicReference
+import kotlin.concurrent.atomics.ExperimentalAtomicApi
 
 object EventManager {
 
-    var runningEvent: EventHandle? = null
+    @OptIn(ExperimentalAtomicApi::class)
+    val runningEvent: AtomicReference<EventHandle?> = AtomicReference(null)
 
     val events = HashMap<String, Event>()
-
-    private var tickerCount = 0L
 
     fun loadEvents() {
         events.clear()
@@ -22,28 +23,28 @@ object EventManager {
         })
     }
 
+    @OptIn(ExperimentalAtomicApi::class)
     fun initialize() {
         loadEvents()
 
-        Ticker {
-            runningEvent?.tick()
-            tickerCount++
-            if (tickerCount < EventsMania.settings.period) {
-                return@Ticker
-            }
-            tickerCount = 0
+        GlobalTicker.runRepeatFixedRate(50L) {
+            runningEvent.load()?.tick()
+        }
 
-            if (runningEvent != null) {
-                return@Ticker
+        val repeatPeriod = EventsMania.settings.period * 50L
+
+        GlobalTicker.runRepeatFixedRate(repeatPeriod) {
+            if (runningEvent.load() != null) {
+                return@runRepeatFixedRate
             }
             if (Bukkit.getOnlinePlayers().size < EventsMania.settings.minPlayers) {
-                return@Ticker
+                return@runRepeatFixedRate
             }
             events.values.random().start()
-        }.register()
+        }
 
         event<PlayerQuitEvent> {
-            val e = runningEvent ?: return@event
+            val e = runningEvent.load() ?: return@event
             e.statistics -= it.player.uniqueId
         }
     }

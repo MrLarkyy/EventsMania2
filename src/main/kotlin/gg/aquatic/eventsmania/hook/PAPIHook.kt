@@ -3,9 +3,11 @@ package gg.aquatic.eventsmania.hook
 import gg.aquatic.eventsmania.EventsMania.dataManager
 import gg.aquatic.eventsmania.events.EventManager
 import gg.aquatic.treepapi.papiPlaceholder
+import kotlin.concurrent.atomics.ExperimentalAtomicApi
 
 object PAPIHook {
 
+    @OptIn(ExperimentalAtomicApi::class)
     fun initialize() = papiPlaceholder("Larkyy","eventsmania") {
         "leaderboard" {
             "rank" {
@@ -36,7 +38,7 @@ object PAPIHook {
         }
         "isrunning" {
             handle {
-                return@handle (EventManager.runningEvent != null).toString()
+                return@handle (EventManager.runningEvent.load() != null).toString()
             }
         }
     }

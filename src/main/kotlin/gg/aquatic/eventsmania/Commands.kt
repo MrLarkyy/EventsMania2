@@ -10,9 +10,11 @@ import gg.aquatic.waves.editor.EditorHandler
 import org.bukkit.command.CommandSender
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
+import kotlin.concurrent.atomics.ExperimentalAtomicApi
 
 object Commands {
 
+    @OptIn(ExperimentalAtomicApi::class)
     fun initialize() {
         command("eventsmania", "em") {
             requires {
@@ -29,21 +31,25 @@ object Commands {
                             return@execute true
                         }
 
-                        if (EventManager.runningEvent != null) {
+                        if (EventManager.runningEvent.load() != null) {
                             Messages.EVENT_ALREADY_RUNNING.message().send(sender)
                             return@execute true
                         }
 
-                        EventManager.runningEvent = event.start()
-                        Messages.EVENT_STARTING.message().send(sender)
+                        val newValue = event.start()
+                        while (true) {
+                            if (EventManager.runningEvent.compareAndSet(null, newValue)) {
+                                Messages.EVENT_STARTING.message().send(sender)
+                                break
+                            }
+                        }
                         true
                     }
                 }
-
             }
             "stop" {
                 suspendExecute<CommandSender> {
-                    val running = EventManager.runningEvent
+                    val running = EventManager.runningEvent.load()
                     if (running == null) {
                         Messages.EVENT_NOT_RUNNING.message().send(sender)
                         return@suspendExecute

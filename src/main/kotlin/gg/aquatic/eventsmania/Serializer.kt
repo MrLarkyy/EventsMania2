@@ -1,5 +1,6 @@
 package gg.aquatic.eventsmania
 
+import gg.aquatic.common.Config
 import gg.aquatic.common.getSectionList
 import gg.aquatic.eventsmania.events.Event
 import gg.aquatic.eventsmania.events.EventHandle
@@ -7,7 +8,6 @@ import gg.aquatic.execute.ActionHandle
 import gg.aquatic.execute.action.ActionSerializer
 import gg.aquatic.statistik.StatisticHandle
 import gg.aquatic.statistik.StatistikSerializer
-import gg.aquatic.waves.Config
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.entity.Player
