@@ -32,7 +32,7 @@ repositories {
 val exposedVersion = "1.0.0"
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
-    compileOnly("gg.aquatic:Waves:26.0.22")
+    compileOnly("gg.aquatic:Waves:26.0.26")
     compileOnly("me.clip:placeholderapi:2.12.2")
     compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     testImplementation(kotlin("test"))
@@ -65,6 +65,7 @@ tasks {
         dependsOn(shadowJar)
     }
 }
+
 tasks.withType(AbstractRun::class) {
     javaLauncher = javaToolchains.launcherFor {
         vendor = JvmVendorSpec.JETBRAINS
@@ -75,7 +76,7 @@ tasks.withType(AbstractRun::class) {
 
 tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
     fun reloc(pkg: String) {
-        relocate(pkg, "gg.aquatic.waves.dependency.$pkg")
+        relocate(pkg, "gg.aquatic.waves.libs.$pkg")
     }
 
     archiveFileName.set("EventsMania2-${project.version}.jar")
@@ -100,4 +101,3 @@ tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
     reloc("org.bstats")
     reloc("com.zaxxer.hikari")
 }
-

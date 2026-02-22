@@ -2,6 +2,7 @@ package gg.aquatic.eventsmania
 
 import gg.aquatic.common.HikariDBFactory
 import gg.aquatic.common.coroutine.VirtualsCtx
+import gg.aquatic.eventsmania.command.Commands
 import gg.aquatic.eventsmania.db.DBHandler
 import gg.aquatic.eventsmania.db.DataHandler
 import gg.aquatic.eventsmania.db.DataManager
@@ -10,6 +11,13 @@ import gg.aquatic.eventsmania.events.EventManager
 import gg.aquatic.eventsmania.hook.PAPIHook
 import gg.aquatic.statistik.StatisticType
 import gg.aquatic.statistik.impl.BlockBreakStatistic
+import gg.aquatic.statistik.impl.BlockPlaceStatistic
+import gg.aquatic.statistik.impl.DamageDealtStatistic
+import gg.aquatic.statistik.impl.DeathStatistic
+import gg.aquatic.statistik.impl.ItemCraftStatistic
+import gg.aquatic.statistik.impl.KillStatistic
+import gg.aquatic.statistik.impl.PlaceholderStatistic
+import gg.aquatic.statistik.impl.TravelStatistic
 import gg.aquatic.waves.Waves
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -22,6 +30,13 @@ object EventsMania : JavaPlugin() {
         Waves.registryBootstrap(Waves) {
             registry(StatisticType.REGISTRY_KEY) {
                 add("BLOCK_BREAK", BlockBreakStatistic)
+                add("BLOCK_PLACE", BlockPlaceStatistic)
+                add("DAMAGE_DEALT", DamageDealtStatistic)
+                add("DEATH", DeathStatistic)
+                add("ITEM_CRAFT", ItemCraftStatistic)
+                add("KILL", KillStatistic)
+                add("PLACEHOLDER", PlaceholderStatistic)
+                add("TRAVEL", TravelStatistic)
             }
         }
 
